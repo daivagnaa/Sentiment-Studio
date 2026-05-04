@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Sentiment Analysis{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">AI-Powered Analysis</p>
+        <h1>Sentiment Analysis Studio</h1>
+      </div>
+      <span class="status-pill">✓ Model Ready</span>
+    </header>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      <p>Advanced sentiment classification powered by deep learning | Real-time analysis</p>
+      <p>Made with ❤️ by <a href="https://github.com/daivagnaa" target="_blank">Daivagna Parmar</a></p>
+    </footer>
+  </div>
+</body>
+</html>

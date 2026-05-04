@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-grid">
+    <div class="hero-card">
+        <h2>Analyze Text Sentiment</h2>
+        <p class="subtitle-text">Enter your text below and let our AI model determine its sentiment in real-time</p>
+        
+        <form method="POST" action="/predict" class="input-form" id="sentiment-form">
+            <div class="form-group">
+                <label for="text" class="form-label">Your Text</label>
+                <textarea 
+                    id="text" 
+                    name="text" 
+                    class="textarea-input"
+                    placeholder="Paste or type your text here..." 
+                    required
+                    rows="6"
+                ></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Analyze Sentiment</button>
+        </form>
+    </div>
+
+    <div class="info-card">
+        <h3>Quick Examples</h3>
+        <p class="subtitle-text">Click to analyze:</p>
+        <div class="example-chips">
+            <button class="example-chip" onclick="fillExample('This product is absolutely amazing! I love it.')">😊 Positive</button>
+            <button class="example-chip" onclick="fillExample('This is the worst experience ever. Terrible service.')">😞 Negative</button>
+            <button class="example-chip" onclick="fillExample('The product works as expected, nothing special.')">😐 Neutral</button>
+            <button class="example-chip" onclick="fillExample('Outstanding quality and excellent customer support!')">🌟 Very Positive</button>
+        </div>
+        
+        <div class="info-box">
+            <h4>How it works</h4>
+            <ul>
+                <li>Uses LSTM neural network</li>
+                <li>Trained on 1.6M real tweets</li>
+                <li>Real-time analysis</li>
+                <li>High accuracy classification</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+{% if error %}
+<section class="result-card error-state" style="margin-top: 24px;">
+    <div class="error-content">
+        <span class="error-icon">⚠️</span>
+        <div>
+            <h3>Analysis Error</h3>
+            <p>{{ error }}</p>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if prediction %}
+<section class="result-card {{ prediction.label|lower }}-state" style="margin-top: 24px;">
+    <div class="result-header-section">
+        <div class="sentiment-badge {{ prediction.label|lower }}">
+            {% if prediction.label == 'Positive' %}
+                <span class="badge-icon">😊</span>
+            {% elif prediction.label == 'Negative' %}
+                <span class="badge-icon">😞</span>
+            {% else %}
+                <span class="badge-icon">😐</span>
+            {% endif %}
+            <div>
+                <p class="badge-label">Sentiment</p>
+                <h2 class="badge-value">{{ prediction.label }}</h2>
+            </div>
+        </div>
+        <div class="confidence-badge">{{ prediction.confidence }}% Confidence</div>
+    </div>
+
+    <div class="meter-container">
+        <div class="meter-track">
+            <div class="meter-fill" style="width: {{ prediction.score * 100 }}%"></div>
+        </div>
+        <div class="meter-labels">
+            <span>Negative</span>
+            <span>{{ '%.2f'|format(prediction.score) }}</span>
+            <span>Positive</span>
+        </div>
+    </div>
+
+    <div class="result-grid">
+        <div class="metric-card">
+            <p class="metric-label">Model Score</p>
+            <p class="metric-value">{{ '%.4f'|format(prediction.score) }}</p>
+        </div>
+        <div class="metric-card">
+            <p class="metric-label">Confidence Level</p>
+            <p class="metric-value">{{ prediction.confidence }}%</p>
+        </div>
+        <div class="metric-card full-width">
+            <p class="metric-label">Processed Text</p>
+            <p class="metric-value processed-text">{{ prediction.cleaned_text or 'No text after preprocessing' }}</p>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button onclick="document.getElementById('sentiment-form').reset(); document.getElementById('text').focus();" class="btn-secondary">Analyze Another</button>
+    </div>
+</section>
+{% endif %}
+
+<script>
+    function fillExample(text) {
+        document.getElementById('text').value = text;
+        document.getElementById('sentiment-form').submit();
+    }
+</script>
+{% endblock %}

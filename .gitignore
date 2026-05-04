@@ -1,0 +1,66 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Large Model Files
+Models/
+text_vectorizer/
+*.h5
+*.keras
+*.pb
+
+# Data Files (Training Dataset - Too Large)
+Data/
+*.csv
+training.1600000.processed.noemoticon.csv
+
+# Temporary Files
+*.tmp
+*.bak
+temp/
+tmp/
+
+# OS Files
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
