@@ -1,3 +1,4 @@
 *.keras filter=lfs diff=lfs merge=lfs -text
 *.pb filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
+Models/text_vectorizer/variables/** filter=lfs diff=lfs merge=lfs -text

@@ -39,12 +39,11 @@ coverage.xml
 .env.local
 .env.*.local
 
-# Large Model Files
-Models/
-text_vectorizer/
+# Large Model Files (tracked via Git LFS — see .gitattributes)
+# Models/  ← removed to allow Render deployment
+# *.keras  ← tracked via LFS
+# *.pb     ← tracked via LFS
 *.h5
-*.keras
-*.pb
 
 # Data Files (Training Dataset - Too Large)
 Data/
