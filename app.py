@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import os
+
+# Suppress TensorFlow CUDA warnings before importing TF
+os.environ.setdefault('CUDA_VISIBLE_DEVICES', '-1')
+os.environ.setdefault('TF_CPP_MIN_LOG_LEVEL', '2')
+
 import re
 import threading
 import shutil
 import tempfile
 from pathlib import Path
 
-import tensorflow as tf
 from flask import Flask, render_template, request
 
 
@@ -39,7 +43,8 @@ def clean_text(text: str) -> str:
     return normalized.strip()
 
 
-def build_sentiment_model() -> tf.keras.Model:
+def build_sentiment_model():
+    import tensorflow as tf
     model = tf.keras.Sequential([
         tf.keras.layers.Input(shape=(200,), dtype='int32'),
         tf.keras.layers.Embedding(20000, 128),
@@ -57,7 +62,9 @@ def build_sentiment_model() -> tf.keras.Model:
     return model
 
 
-def load_artifacts() -> tuple[tf.keras.Model, tf.keras.Model]:
+def load_artifacts():
+    import tensorflow as tf
+
     if not MODEL_PATH.exists():
         raise FileNotFoundError(f"Missing model file: {MODEL_PATH}")
 
@@ -116,23 +123,39 @@ def load_artifacts() -> tuple[tf.keras.Model, tf.keras.Model]:
     return model, vectorizer_model
 
 
-MODEL, VECTORIZER_MODEL = load_artifacts()
+# ── Lazy-loaded model singleton ──────────────────────────────────────────
+# The model is NOT loaded at import time. It is loaded on the first request.
+# This lets gunicorn bind to the port immediately so Render doesn't time out.
+
+_model = None
+_vectorizer = None
 _predict_lock = threading.Lock()
 
 
+def _get_models():
+    """Load models on first call, return cached models thereafter."""
+    global _model, _vectorizer
+    if _model is None:
+        _model, _vectorizer = load_artifacts()
+    return _model, _vectorizer
+
+
 def predict_sentiment(text: str) -> dict[str, object]:
+    import tensorflow as tf
+
     cleaned_text = clean_text(text)
     with _predict_lock:
-        vectorized = VECTORIZER_MODEL(tf.constant([cleaned_text]))
-        
+        model, vectorizer = _get_models()
+        vectorized = vectorizer(tf.constant([cleaned_text]))
+
         # Extract tensor from TFSMLayer dict output
         if isinstance(vectorized, dict):
             # TFSMLayer returns dict; extract the actual output
             vectorized_text = list(vectorized.values())[0]
         else:
             vectorized_text = vectorized
-        
-        score = float(MODEL(vectorized_text, training=False)[0][0])
+
+        score = float(model(vectorized_text, training=False)[0][0])
     is_positive = score >= 0.5
     label = 'Positive' if is_positive else 'Negative'
     confidence = score if is_positive else 1 - score
