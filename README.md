@@ -4,8 +4,7 @@ This project implements a comprehensive sentiment analysis solution using deep l
 
 ## 🚀 Live Demo
 
-**Web Application**: [Sentiment Analysis Studio](http://127.0.0.1:5000) *(Update with live deployment link)*
-
+**Web Application**: [Sentiment Analysis Studio](https://sentiment-studio.onrender.com)
 ## Project Structure
 
 ```
@@ -158,8 +157,8 @@ pip install flask tensorflow keras numpy
 
 ### 🌐 Access Web Application
 
-#### Online Demo *(Coming Soon)*
-Visit the live demo: **[Sentiment Analysis Studio]**(*Update link after deployment*)
+#### Online Demo
+Visit the live demo: **[Sentiment Analysis Studio]**(https://sentiment-studio.onrender.com)
 
 #### 💻 Run Locally
 
@@ -333,7 +332,7 @@ Input text is automatically processed:
 **Daivagna Parmar**
 - 📧 **Email**: [devparmar1895@gmail.com](mailto:devparmar1895@gmail.com)
 - 🔗 **GitHub**: [@daivagnaa](https://github.com/daivagnaa)
-- 💼 **LinkedIn**: Connect for collaborations and opportunities
+- 💼 **LinkedIn** : [Daivagna Parmar](https://in.linkedin.com/in/daivagna-parmar-949315316)
 
 ## 📜 License
 
@@ -367,6 +366,6 @@ Contributions are welcome! Please feel free to:
 
 ---
 
-**Last Updated**: May 4, 2026  
+**Last Updated**: May 5, 2026  
 **Version**: 1.0  
 **Status**: ✅ Production Ready
