@@ -4,7 +4,8 @@ This project implements a comprehensive sentiment analysis solution using deep l
 
 ## 🚀 Live Demo
 
-**Web Application**: [Sentiment Analysis Studio](https://sentiment-studio.onrender.com)
+**Web Application**: [Sentiment Analysis Studio](https://sentiment-studio.onrender.com) 
+**Note : Wait for few seconds for response it may take longer than expected.**
 ## Project Structure
 
 ```
