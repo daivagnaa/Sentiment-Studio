@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import re
+import threading
 import shutil
 import tempfile
 from pathlib import Path
@@ -116,20 +117,22 @@ def load_artifacts() -> tuple[tf.keras.Model, tf.keras.Model]:
 
 
 MODEL, VECTORIZER_MODEL = load_artifacts()
+_predict_lock = threading.Lock()
 
 
 def predict_sentiment(text: str) -> dict[str, object]:
     cleaned_text = clean_text(text)
-    vectorized = VECTORIZER_MODEL(tf.constant([cleaned_text]))
-    
-    # Extract tensor from TFSMLayer dict output
-    if isinstance(vectorized, dict):
-        # TFSMLayer returns dict; extract the actual output
-        vectorized_text = list(vectorized.values())[0]
-    else:
-        vectorized_text = vectorized
-    
-    score = float(MODEL.predict(vectorized_text, verbose=0)[0][0])
+    with _predict_lock:
+        vectorized = VECTORIZER_MODEL(tf.constant([cleaned_text]))
+        
+        # Extract tensor from TFSMLayer dict output
+        if isinstance(vectorized, dict):
+            # TFSMLayer returns dict; extract the actual output
+            vectorized_text = list(vectorized.values())[0]
+        else:
+            vectorized_text = vectorized
+        
+        score = float(MODEL(vectorized_text, training=False)[0][0])
     is_positive = score >= 0.5
     label = 'Positive' if is_positive else 'Negative'
     confidence = score if is_positive else 1 - score
