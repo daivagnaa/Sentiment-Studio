@@ -28,7 +28,6 @@
         <div class="example-chips">
             <button class="example-chip" onclick="fillExample('This product is absolutely amazing! I love it.')">😊 Positive</button>
             <button class="example-chip" onclick="fillExample('This is the worst experience ever. Terrible service.')">😞 Negative</button>
-            <button class="example-chip" onclick="fillExample('The product works as expected, nothing special.')">😐 Neutral</button>
             <button class="example-chip" onclick="fillExample('Outstanding quality and excellent customer support!')">🌟 Very Positive</button>
         </div>
         
@@ -64,8 +63,6 @@
                 <span class="badge-icon">😊</span>
             {% elif prediction.label == 'Negative' %}
                 <span class="badge-icon">😞</span>
-            {% else %}
-                <span class="badge-icon">😐</span>
             {% endif %}
             <div>
                 <p class="badge-label">Sentiment</p>
@@ -77,7 +74,7 @@
 
     <div class="meter-container">
         <div class="meter-track">
-            <div class="meter-fill" style="width: {{ prediction.score * 100 }}%"></div>
+            <div class="meter-fill" data-score="{{ prediction.score }}"></div>
         </div>
         <div class="meter-labels">
             <span>Negative</span>
@@ -108,6 +105,11 @@
 {% endif %}
 
 <script>
+    document.querySelectorAll('.meter-fill[data-score]').forEach((meter) => {
+        const score = Number(meter.dataset.score) || 0;
+        meter.style.width = `${score * 100}%`;
+    });
+
     function fillExample(text) {
         document.getElementById('text').value = text;
         document.getElementById('sentiment-form').submit();
