@@ -148,7 +148,7 @@ Sentiment Analysis/
 1. Clone or open the project folder.
 
    ```bash
-   cd "e:\Data Science\Projects\Sentiment Analysis"
+   cd "Sentiment Analysis"
    ```
 
 2. Create and activate a virtual environment.
